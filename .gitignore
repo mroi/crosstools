@@ -1,0 +1,8 @@
+bin
+include
+lib
+libexec
+share
+i386-linux-gnu
+i386-pc-mingw32
+x86_64-linux-gnu
