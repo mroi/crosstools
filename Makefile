@@ -49,7 +49,7 @@ src/binutils-build/%: $(or $(wildcard src/binutils-[0-9]*),src/binutils-<latest>
 src/libc-build/i386-linux-gnu: $(foreach pkg,linux-libc-dev libc6 libc6-dev,$(or $(wildcard src/$(pkg)_*_i386.deb),src/$(pkg)_<latest>_i386.deb))
 src/libc-build/x86_64-linux-gnu: $(foreach pkg,linux-libc-dev libc6 libc6-dev,$(or $(wildcard src/$(pkg)_*_amd64.deb),src/$(pkg)_<latest>_amd64.deb))
 src/libc-build/%-linux-gnu:
-	mkdir -p $@ && cd $@ && $(foreach pkg,$^,dpkg-deb -x ../../../$(pkg) . &&) touch .
+	mkdir -p $@ && $(foreach pkg,$^,dpkg-deb -x $(pkg) $@ &&) touch $@ || rmdir -p $@
 	mkdir -p $(@F)/include && mv -n $@/usr/include/$(@F)/* $@/usr/include/* $(@F)/include/ && rmdir $(@F)/include/$(@F)
 	mkdir -p $(@F)/lib && mv -n $@/lib/$(@F)/* $@/usr/lib/$(@F)/*.[oa] $(@F)/lib/
 	sed 's|/usr/|/|g;s|/$(@F)/|/|g;s| /| $(PWD)/$(@F)/|g' $@/usr/lib/$(@F)/libc.so > $(@F)/lib/libc.so && chmod a+x $(@F)/lib/libc.so
