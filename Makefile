@@ -52,8 +52,12 @@ src/libc-build/%-linux-gnu:
 	mkdir -p $@ && $(foreach pkg,$^,dpkg-deb -x $(pkg) $@ &&) touch $@ || rmdir -p $@
 	mkdir -p $(@F)/include && mv -n $@/usr/include/$(@F)/* $@/usr/include/* $(@F)/include/ && rmdir $(@F)/include/$(@F)
 	mkdir -p $(@F)/lib && mv -n $@/lib/$(@F)/* $@/usr/lib/$(@F)/*.[oa] $(@F)/lib/
-	sed 's|/usr/|/|g;s|/$(@F)/|/|g;s| /| $(PWD)/$(@F)/|g' $@/usr/lib/$(@F)/libc.so > $(@F)/lib/libc.so && chmod a+x $(@F)/lib/libc.so
-	sed 's|/usr/|/|g;s|/$(@F)/|/|g;s| /| $(PWD)/$(@F)/|g' $@/usr/lib/$(@F)/libpthread.so > $(@F)/lib/libpthread.so && chmod a+x $(@F)/lib/libpthread.so
+	for lib in $@/usr/lib/$(@F)/*.so ; do \
+		test -f $$lib && \
+			sed 's|/usr/|/|g;s|/$(@F)/|/|g;s| /| $(PWD)/$(@F)/|g' $$lib > $(@F)/lib/$$(basename $$lib) ; \
+		test -L $$lib && \
+			ln -s $$(basename $$(readlink $$lib)) $(@F)/lib/$$(basename $$lib) ; \
+	done
 
 src/libc-build/i386-pc-mingw32: $(foreach pkg,mingwrt w32api,$(or $(wildcard src/$(pkg)-*),src/$(pkg)-<latest>))
 	mkdir -p $(@F)/include && cp -R $(addsuffix /include/*,$^) $(@F)/include/
