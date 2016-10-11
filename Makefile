@@ -29,7 +29,7 @@ purge:
 
 gcc: binutils libc gmp mpfr mpc
 mpfr: gmp
-mpc: mpfr gmp
+mpc: gmp mpfr
 
 binutils: $(foreach arch,$(TARGETS),src/binutils-build/$(arch))
 libc: $(foreach arch,$(TARGETS),src/libc-build/$(arch))
