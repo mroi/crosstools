@@ -11,6 +11,7 @@ SANDBOX_PROFILE = \
 	(allow file* (subpath "/private/tmp")(subpath "/private/var/tmp")(subpath "/private/var/folders")) \
 	(allow file* (subpath "$(PWD)")) \
 	(allow file-read* $(shell path=$(PWD) ; while test "$$path" ; do echo "(literal \"$$path\")" ; path="$${path%/*}" ; done)) \
+	(deny process-exec (literal "/usr/bin/xcodebuild")) \
 	(allow process-fork)(allow process-exec)
 
 all %:
