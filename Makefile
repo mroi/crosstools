@@ -11,9 +11,7 @@ SANDBOX_PROFILE = \
 	(allow file* (subpath "/private/tmp")(subpath "/private/var/tmp")(subpath "/private/var/folders")) \
 	(allow file* (subpath "$(PWD)")) \
 	(allow file-read* $(shell path=$(PWD) ; while test "$$path" ; do echo "(literal \"$$path\")" ; path="$${path%/*}" ; done)) \
-	(allow process-fork)(allow process-exec) \
-	(allow ipc-posix-shm (ipc-posix-name "apple.shm.notification_center")) \
-	(allow mach-lookup (global-name-regex \#"^com.apple.system.DirectoryService.membership"))
+	(allow process-fork)(allow process-exec)
 
 all %:
 	@sandbox-exec -p '$(SANDBOX_PROFILE)' $(MAKE) SANDBOX=yes $@
