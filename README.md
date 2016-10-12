@@ -7,8 +7,8 @@ Simply run `make` to build OS-X-hosted cross-compilation toolchains targeting
 * Windows/i386.
 
 Runtime libraries are taken from [Ubuntu](http://packages.ubuntu.com) and 
-[MinGW](http://www.mingw.org). The build system will tell you, which sources you need to 
-download and unpack.
+[Mingw-w64](http://mingw-w64.org/). The build system will tell you, which sources you need 
+to download and unpack.
 
 Note that the entire build runs 
 [sandboxed](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man7/sandbox.7.html) 

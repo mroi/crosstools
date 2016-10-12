@@ -1,5 +1,5 @@
 HOST    := $(shell cc -dumpmachine)
-TARGETS ?= i386-linux-gnu x86_64-linux-gnu i386-pc-mingw32
+TARGETS ?= i386-linux-gnu x86_64-linux-gnu i686-w64-mingw32 x86_64-w64-mingw32
 
 ifeq ($(SANDBOX),)
 
@@ -60,10 +60,13 @@ src/libc-build/%-linux-gnu:
 	done
 	case $(@F) in (x86_64-*) mv -n $(@F)/lib $(@F)/lib64 ; ln -s lib64 $(@F)/lib ;; esac
 
-src/libc-build/i386-pc-mingw32: $(foreach pkg,mingwrt w32api,$(or $(wildcard src/$(pkg)-*),src/$(pkg)-<latest>))
-	mkdir -p $(@F)/include && cp -R $(addsuffix /include/*,$^) $(@F)/include/
-	mkdir -p $(@F)/lib && cp -R $(addsuffix /lib/*,$^) $(@F)/lib/
-	touch $@
+src/libc-build/i686-w64-mingw32: $(or $(wildcard src/mingw-w64-i686-dev_*_all.deb),src/mingw-w64-i686-dev_<latest>_all.deb)
+src/libc-build/x86_64-w64-mingw32: $(or $(wildcard src/mingw-w64-x86-64-dev_*_all.deb),src/mingw-w64-x86-64-dev_<latest>_all.deb)
+src/libc-build/%-w64-mingw32: $(or $(wildcard src/mingw-w64-common_*_all.deb),src/mingw-w64-common_<latest>_all.deb)
+	mkdir -p $@ && $(foreach pkg,$^,dpkg-deb -x $(pkg) $@ &&) touch $@ || rmdir -p $@
+	mkdir -p $(@F)/include && mv -n $@/usr/share/mingw-w64/include/* $@/usr/$(@F)/include/* $(@F)/include
+	mkdir -p $(@F)/lib && mv -n $@/usr/$(@F)/lib/* $(@F)/lib
+	case $(@F) in (x86_64-*) mv -n $(@F)/lib $(@F)/lib64 ; ln -s lib64 $(@F)/lib ;; esac
 
 src/gmp-build/%: $(or $(wildcard src/gmp-[0-9]*),src/gmp-<latest>)
 	mkdir -p $@ && cd $@ && \
