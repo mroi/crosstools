@@ -58,6 +58,7 @@ src/libc-build/%-linux-gnu:
 		test -L $$lib && \
 			ln -s $$(basename $$(readlink $$lib)) $(@F)/lib/$$(basename $$lib) ; \
 	done
+	case $(@F) in (x86_64-*) mv -n $(@F)/lib $(@F)/lib64 ; ln -s lib64 $(@F)/lib ;; esac
 
 src/libc-build/i386-pc-mingw32: $(foreach pkg,mingwrt w32api,$(or $(wildcard src/$(pkg)-*),src/$(pkg)-<latest>))
 	mkdir -p $(@F)/include && cp -R $(addsuffix /include/*,$^) $(@F)/include/
