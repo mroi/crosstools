@@ -22,7 +22,7 @@ else
 all: binutils libc gcc
 
 clean:
-	rm -rf bin include lib libexec share $(TARGETS) src/*-build
+	rm -rf bin include lib share $(TARGETS) src/*-build
 
 purge:
 	rm -rf src
@@ -96,6 +96,7 @@ src/gcc-build/%: $(or $(wildcard src/gcc-[0-9]*),src/gcc-<latest>)
 	mkdir -p $@ && cd $@ && \
 	../../../$</configure \
 		--prefix=$(PWD) \
+		--libexecdir=$(PWD)/lib \
 		--target=$(@F) \
 		--enable-languages="c,c++,objc,obj-c++" \
 		--with-gmp=$(PWD) \
