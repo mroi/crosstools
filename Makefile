@@ -21,11 +21,8 @@ else
 
 all: binutils libc gcc
 
-clean:
-	rm -rf bin include lib share $(TARGETS) src/*-build
-
 purge:
-	rm -rf src
+	rm -rf bin include lib share $(TARGETS) src/*-build
 
 gcc: binutils libc gmp mpfr mpc
 mpfr: gmp
