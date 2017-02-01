@@ -1,7 +1,7 @@
-Cross-Compiler for OS X
-=======================
+Cross-Compiler for macOS
+========================
 
-Simply run `make` to build OS-X-hosted cross-compilation toolchains targeting
+Simply run `make` to build macOS-hosted cross-compilation toolchains targeting
 * Linux/i386,
 * Linux/x86_64, and
 * Windows/i386.
